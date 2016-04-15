@@ -7,3 +7,4 @@ C:\Users\JuanJose\Documents\GitHub\Compi1_Practica2\Practica_2_Compiladores_1\Pr
 C:\Users\JuanJose\Documents\GitHub\Compi1_Practica2\Practica_2_Compiladores_1\Practica_2_Compiladores_1\obj\Debug\Practica_2_Compiladores_1.exe
 C:\Users\JuanJose\Documents\GitHub\Compi1_Practica2\Practica_2_Compiladores_1\Practica_2_Compiladores_1\obj\Debug\Practica_2_Compiladores_1.pdb
 C:\Users\JuanJose\Documents\GitHub\Compi1_Practica2\Practica_2_Compiladores_1\Practica_2_Compiladores_1\obj\Debug\Practica_2_Compiladores_1.Form1.resources
+C:\Users\JuanJose\Documents\GitHub\Compi1_Practica2\Practica_2_Compiladores_1\Practica_2_Compiladores_1\bin\Debug\Irony.dll
