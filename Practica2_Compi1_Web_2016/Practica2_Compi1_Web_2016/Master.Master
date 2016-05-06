@@ -1,0 +1,62 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Master.master.cs" Inherits="Practica2_Compi1_Web_2016.Master" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Practica 2 Compi 1</title>
+    <link href="css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <asp:ContentPlaceHolder ID="head" runat="server"></asp:ContentPlaceHolder>
+</head>
+<body>
+
+    <nav class="navbar navbar-default" role="navigation">
+        <!-- El logotipo y el icono que despliega el menú se agrupan
+       para mostrarlos mejor en los dispositivos móviles -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse"
+                data-target=".navbar-ex1-collapse">
+                <span class="sr-only">Desplegar navegación</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Practica 2 Compi 1 2016 </a>
+        </div>
+
+        <!-- Agrupar los enlaces de navegación, los formularios y cualquier
+       otro elemento que se pueda ocultar al minimizar la barra -->
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="Principal.aspx">Principal</a></li>
+                <li><a href="css/MU.pdf">Manual de Usuario</a></li>
+                <li><a href="css/MT.pdf">Manual Tecnico</a></li>
+                <!--li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Menú #1 <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Acción #1</a></li>
+                        <li><a href="#">Acción #2</a></li>
+                        <li><a href="#">Acción #3</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#">Acción #4</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#">Acción #5</a></li>
+                    </!--ul>
+                </li-->
+            </ul>
+
+        </div>
+    </nav>
+
+    <div class="container">
+        <form id="form1" runat="server">
+            <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+            </asp:ContentPlaceHolder>
+        </form>
+    </div>
+    <script src="js/jquery-2.2.3.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+</body>
+</html>

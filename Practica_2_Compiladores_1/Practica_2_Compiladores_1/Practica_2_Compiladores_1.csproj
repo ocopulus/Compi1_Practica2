@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Analizadores\Gramatica.cs" />
+    <Compile Include="Analizadores\Sintactico.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>

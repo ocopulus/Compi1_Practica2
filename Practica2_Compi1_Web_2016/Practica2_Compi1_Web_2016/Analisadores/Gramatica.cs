@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Web;
 using Irony.Ast;
 using Irony.Parsing;
 
-namespace Practica_2_Compiladores_1.Analizadores
+namespace Practica2_Compi1_Web_2016.Analisadores
 {
-    class Gramatica : Grammar
+    public class Gramatica : Grammar
     {
-        public Gramatica () : base(caseSensitive : true)
+        public Gramatica() : base  (caseSensitive : true)
         {
 
             #region Expreciones Regulares
             NumberLiteral numero_entero = new NumberLiteral("numero_entero");
+            //RegexBasedTerminal numero_entero = new RegexBasedTerminal("numero_entero", "[0-9]+");
             RegexBasedTerminal numero_decimal = new RegexBasedTerminal("numero_decimal", "[0-9]+.[0-9]+");
             RegexBasedTerminal caracter = new RegexBasedTerminal("caracter", "'[a-zA-Z]'");
             StringLiteral cadena = new StringLiteral("cadena", "\"");
@@ -109,43 +109,49 @@ namespace Practica_2_Compiladores_1.Analizadores
             #endregion
 
             #region Gramatica
-            //Inicio de la gramatica 
-            Inicio.Rule = programa + identificador + corcheteabre + Pcont + corchetecierra;
-            //Contenido que va dentro del programa 
-            Pcontp.Rule = Dvariables
+            //Inicio de la Gramatica 
+            Inicio.Rule = programa + identificador + corcheteabre + Pcontp + corchetecierra;
+            //Creamos Lista de Contenido de Programa
+            Pcontp.Rule = Pcontp + Pcont
+                | Pcont;
+            //Aqui ponemos todo lo que puede benir
+            Pcont.Rule = Dvariables
                 | Funciones
                 | Principal;
-            //Definicion del Metodo Principal
-            Principal.Rule = principal + parentesisabre + parentisiscierra + corcheteabre + Sent + corchetecierra;
-            //Se definen las funciones y metodos que se declaran 
+            //Aqui definimos el Metodo Principal
+            Principal.Rule = principal + parentesisabre + parentisiscierra + corcheteabre + Sent + corchetecierra
+                | principal + parentesisabre + parentisiscierra + corcheteabre + corchetecierra;
+            //Aqui definimos las Funciones y Metodos
             Funciones.Rule = Tipo + identificador + parentesisabre + parentisiscierra + corcheteabre + Sent + corchetecierra
-                | Tipo + identificador + parentesisabre + Parametros + parentisiscierra + corcheteabre + Sent + corchetecierra;
-            //Se definen el Tipo 
+                | Tipo + identificador + parentesisabre + parentisiscierra + corcheteabre + corchetecierra
+                | Tipo + identificador + parentesisabre + Parametros + parentisiscierra + corcheteabre + Sent + corchetecierra
+                | Tipo + identificador + parentesisabre + Parametros + parentisiscierra + corcheteabre + corchetecierra;
+            //Aqui se definen los tipos de Funciones
             Tipo.Rule = tkint
                 | tkdouble
                 | tkstring
                 | tkchar
                 | tkbool
                 | tkvoid;
-            //Aqui definimos Prametos de las declariones 
+            //Aqui se definen los parametos que pueden llevar las funciones 
             Parametros.Rule = Parametros + coma + tkvar + identificador
                 | tkvar + identificador;
-            //Parte de la Declaracion de Variables yolo
+            //Para la Declacion de Variables
             Dvariables.Rule = tkvar + Ids + puntoycoma
                 | tkvar + identificador + asignacion + E + puntoycoma
                 | tkvar + identificador + asignacion + Log + puntoycoma
                 | identificador + asignacion + E + puntoycoma
                 | identificador + asignacion + Log + puntoycoma;
-            //Parte de Recursivadad de las variables
+            
+            //multiple id...}
             Ids.Rule = Ids + coma + identificador
                 | identificador;
-            //Se define la E 
+            //Se define E
             E.Rule = E + mas + E
                 | E + menos + E
                 | E + por + E
                 | E + div + E
                 | numero_entero
-                | numero_decimal
                 | cadena
                 | identificador
                 | identificador + parentesisabre + parentisiscierra
@@ -153,7 +159,18 @@ namespace Practica_2_Compiladores_1.Analizadores
                 | caracter
                 | parentesisabre + E + parentisiscierra
                 | raiz + parentesisabre + E + coma + E + parentisiscierra;
-            //Se define Log que son la Expreciones Logicas 
+            //Aqui definimos los valores que pueden ir dentro de una funcion
+            ParValor.Rule = ParValor + coma + ParValorp
+                | ParValorp;
+            //Aqui definmos Todos los parametos que puede benir
+            ParValorp.Rule = numero_entero
+                | cadena
+                | tkchar
+                | E
+                | identificador
+                | identificador + parentesisabre + parentisiscierra
+                | identificador + parentesisabre + ParValor + parentisiscierra;
+            //Aqui definomos las Expreciones Logiacas
             Log.Rule = Log + or + Log
                 | Log + and + Log
                 | not + Log
@@ -161,30 +178,20 @@ namespace Practica_2_Compiladores_1.Analizadores
                 | tkfalse
                 | tktrue
                 | parentesisabre + Log + parentisiscierra;
-            //Aqui se define las Expresioens de mayor y menor y esas charadas
+            //Aqui defimos las formas logcias 
             Ex.Rule = E + menor + E
                 | E + mayor + E
                 | E + menorigual + E
                 | E + mayorigual + E
                 | E + igual + E
                 | E + diferente + E
-                | parentesisabre + Ex + parentisiscierra;
-            //Aqui definimos las listas valores que pueden ir de parametros 
-            ParValor.Rule = ParValor + coma + ParValorp
-                | ParValorp;
-            //Aqui definimos los parametos que puden benir en los parametros
-            ParValorp.Rule = numero_entero
-                | numero_decimal
-                | cadena
-                | tkchar
-                | E
-                | identificador
-                | identificador + parentesisabre + parentisiscierra
-                | identificador + parentesisabre + ParValor + parentisiscierra;
-            //Aqui se declara la lista de Sentencias 
+                | parentesisabre + Ex + parentisiscierra
+                |E;
+            //Aqui va la parte de las multiples sentencias que pueden ir dentro de un metodo
             Sent.Rule = Sent + Sentp
                 | Sentp;
-            //Aqui se define las sentencias que puede benir 
+                //| Empty;
+            //Lo que pudebe bernir en las Sentencias
             Sentp.Rule = Dvariables
                 | imprimir + parentesisabre + E + parentisiscierra + puntoycoma
                 | graficar + parentesisabre + cadena + coma + cadena + coma + NTvar + coma + NTvar + coma + cadena + parentisiscierra + puntoycoma
@@ -194,45 +201,43 @@ namespace Practica_2_Compiladores_1.Analizadores
                 | Hace
                 | identificador + parentesisabre + parentisiscierra + puntoycoma
                 | identificador + parentesisabre + ParValor + parentisiscierra + puntoycoma;
-            //Aqui va el valor de NTvar
+            //Definicon de NTvar
             NTvar.Rule = numero_entero
-                | numero_decimal
-                | menos + numero_entero
-                | menos + numero_decimal;
-            //Aqui va todo sobre la declaracion del IF
+               // | numero_decimal
+                | menos + NTvar;
             IF.Rule = SI + parentesisabre + Log + parentisiscierra + corcheteabre + Sent2 + corchetecierra
                 | SI + parentesisabre + Log + parentisiscierra + corcheteabre + Sent2 + corchetecierra + SINO + corcheteabre + Sent2 + corchetecierra
                 | SI + parentesisabre + Log + parentisiscierra + corcheteabre + Sent2 + corchetecierra + Mulsinosi
                 | SI + parentesisabre + Log + parentisiscierra + corcheteabre + Sent2 + corchetecierra + Mulsinosi + SINO + corcheteabre + Sent2 + corchetecierra;
-            //Aqui definomos el el Mulsinosi
+            //Para los Mulpiples si no
             Mulsinosi.Rule = Mulsinosi + Sinosi
                 | Sinosi;
-            //Aqui definimos el Sinosi
+            //Definicon se Sinosi
             Sinosi.Rule = SINO_SI + parentesisabre + Log + parentisiscierra + corcheteabre + Sent2 + corchetecierra;
             //Aqui definimos el Interrup
             Interrup.Rule = INTERRUPTOR + parentesisabre + E + parentisiscierra + corcheteabre + Casos + corchetecierra;
             //Aqui definimos los Casos 
             Casos.Rule = Casos + Caso
-                | Caso;
+                | Caso
+                | Empty;
             //Aqui definimos lo que es un Caso
             Caso.Rule = CASO + PorCaso + dospuntos + Sent2
                 | DEFECTO + dospuntos + Sent2;
             //Aqui definimos esto del PorCaso
             PorCaso.Rule = cadena
-                | numero_decimal
                 | numero_entero
                 | caracter
                 | tktrue
                 | tkfalse;
-
             //Aqui definomos Mien
             Mien.Rule = MIENTRAS + parentesisabre + Log + parentisiscierra + corcheteabre + Sent2 + corchetecierra;
             //Aqui hacemos lo Hace
-            Hace.Rule = HACER + corcheteabre + Sent2 + corchetecierra + MIENTRAS + parentesisabre + Log + parentisiscierra;
-            //Aqui definimos las Listas de Sentencias2 
+            Hace.Rule = HACER + corcheteabre + Sent2 + corchetecierra + MIENTRAS + parentesisabre + Log + parentisiscierra + puntoycoma;
+            //Aqui definomos las Listas de Sentencis que puede ir en las estructuras
             Sent2.Rule = Sent2 + Sent2p
-                | Sent2p;
-            //Aqui definimos lo que puede benir en Sentencias 2 prima
+                | Sent2p
+                | Empty;
+            //Aqui definimos las Sentencias 
             Sent2p.Rule = Dvariables
                 | imprimir + parentesisabre + E + parentisiscierra + puntoycoma
                 | graficar + parentesisabre + cadena + coma + cadena + coma + NTvar + coma + NTvar + coma + cadena + parentisiscierra + puntoycoma
@@ -242,6 +247,7 @@ namespace Practica_2_Compiladores_1.Analizadores
                 | Hace
                 | identificador + parentesisabre + parentisiscierra + puntoycoma
                 | identificador + parentesisabre + ParValor + parentisiscierra + puntoycoma;
+            
             #endregion
 
             #region preferencias
